@@ -1,0 +1,45 @@
+{
+  "variables": {
+    "aws_region": "eu-west-1",
+    "aws_instance_type": "t2.micro",
+    "aws_ami_source": "ami-7abd0209",
+    "aws_ami_user": "centos",
+    "image_name": "centos-7-{{ isotime \"2006-01-02\" }}-{{ uuid }}",
+    "ssh_timeout": "5m",
+    "ansible_verbosity_level": "vv",
+    "ansible_host_key_checking": "false",
+    "ansible_sftp_command": "/usr/libexec/openssh/sftp-server -e",
+    "ansible_playbooks_dir": "./files/playbooks"
+  },
+
+  "builders": [
+    {
+      "type": "amazon-ebs",
+      "region": "{{ user `aws_region` }}",
+      "instance_type": "{{ user `aws_instance_type` }}",
+      "source_ami": "{{ user `aws_ami_source` }}",
+      "ami_name": "{{ user `image_name` | clean_ami_name }}",
+      "ami_description": "CentOS 7.x-based image with extra hardening",
+      "ssh_username": "{{ user `aws_ami_user` }}",
+      "ssh_timeout": "{{ user `ssh_timeout` }}",
+      "ssh_pty": false,
+      "user_data_file": "./files/scripts/user-data.sh"
+    }
+  ],
+
+  "provisioners": [
+    {
+      "type": "ansible",
+      "user": "{{user `ami_user`}}",
+      "sftp_command": "{{ user `ansible_sftp_command` }}",
+      "playbook_file": "{{user `ansible_playbooks_dir`}}/base.yml",
+      "groups": [
+        "packer"
+      ],
+      "extra_arguments": [
+        "-{{ user `ansible_verbosity_level` }}"
+      ]
+    }
+  ]
+
+}

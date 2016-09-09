@@ -1,0 +1,16 @@
+---
+
+  config:
+    verbosity_level: 2
+    selinux_level: permissive
+    selinux_policy: targeted # reqired if `selinux_level` is not `disabled`
+
+  packages:
+    os:
+      - curl
+      - git
+      - htop
+      - mc
+      - mlocate
+      - screen
+      - tree

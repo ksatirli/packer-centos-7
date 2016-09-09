@@ -1,0 +1,9 @@
+---
+
+  - # debug role, see https://galaxy.ansible.com/cultivatedops/debug/
+    src: cultivatedops.debug
+    name: debug
+
+  - # debug role, see https://galaxy.ansible.com/cultivatedops/diskcleanup/
+    src: cultivatedops.diskcleanup
+    name: diskcleanup
