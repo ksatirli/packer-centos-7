@@ -1,0 +1,13 @@
+---
+
+- name: prepping Ansible Control for Packer
+  gather_facts: false
+  hosts: localhost
+
+  tasks:
+    - name: installing Ansible role(s)
+      command: >
+        ansible-galaxy
+          --roles-path="./files/roles/"
+          --role-file="./files/vars/ansible-roles.yml"
+          install

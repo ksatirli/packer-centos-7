@@ -1,0 +1,34 @@
+---
+
+- name: provisioning base
+  hosts: packer
+  become: true
+  remote_user: centos
+  vars_files:
+    - ../vars/config.yml
+
+  roles:
+    # output some debug information
+    - role: "../../../../ansible/debug"
+      vars:
+        verbosity_level: "{{ config.verbosity_level }}"
+
+  tasks:
+    - selinux:
+        policy: "{{ config.selinux_policy | default(omit) }}"
+        state: "{{ config.selinux_level }}"
+      tags:
+        - selinux
+
+    - yum:
+        name: "{{ item }}"
+        state: latest
+      with_items: "{{ config.packages.os }}"
+      tags:
+        - yum
+
+    - yum:
+        name: "*"
+        state: latest
+      tags:
+        - yum_all
