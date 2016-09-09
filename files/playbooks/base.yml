@@ -9,7 +9,7 @@
 
   roles:
     # output some debug information
-    - role: "../../../../ansible/debug"
+    - role: debug
       vars:
         verbosity_level: "{{ config.verbosity_level }}"
 
@@ -23,7 +23,7 @@
     - yum:
         name: "{{ item }}"
         state: latest
-      with_items: "{{ config.packages.os }}"
+      with_items: "{{ packages.os }}"
       tags:
         - yum
 
@@ -31,4 +31,8 @@
         name: "*"
         state: latest
       tags:
-        - yum_all
+        - yum_update_all
+
+  # post_tasks:
+  #   -
+  #     include: ./roles/diskcleanup/tasks/main.yml

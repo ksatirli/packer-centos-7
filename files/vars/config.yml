@@ -9,7 +9,6 @@
     os:
       - curl
       - git
-      - htop
       - mc
       - mlocate
       - screen

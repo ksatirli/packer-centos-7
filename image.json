@@ -10,7 +10,8 @@
     "ansible_verbosity_level": "vv",
     "ansible_host_key_checking": "false",
     "ansible_sftp_command": "/usr/libexec/openssh/sftp-server -e",
-    "ansible_playbooks_dir": "./files/playbooks"
+    "ansible_playbooks_dir": "./files/playbooks",
+    "ansible_tags_skip": ""
   },
 
   "builders": [
@@ -38,7 +39,8 @@
         "packer"
       ],
       "extra_arguments": [
-        "-{{ user `ansible_verbosity_level` }}"
+        "-{{ user `ansible_verbosity_level` }}",
+        "--skip-tags={{ user `ansible_tags_skip` }}"
       ]
     }
   ]
