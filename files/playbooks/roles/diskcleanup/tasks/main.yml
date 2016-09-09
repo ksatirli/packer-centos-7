@@ -1,4 +1,0 @@
----
-  - name: Cleanup disk after packer
-    script: ../files/cleanup.sh
-    when: ansible_os_family == "RedHat"
