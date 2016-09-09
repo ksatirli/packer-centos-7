@@ -1,0 +1,66 @@
+---
+
+- debug:
+    msg: "ansible_connection: {{ ansible_connection }}"
+    verbosity: "{{ verbosity_level }}"
+  when: ansible_connection is defined
+
+- debug:
+    msg: "ansible_user: {{ ansible_user }}"
+    verbosity: "{{ verbosity_level }}"
+  when: ansible_user is defined
+
+- debug:
+    msg: "ansible_host: {{ ansible_host }}"
+    verbosity: "{{ verbosity_level }}"
+  when: ansible_host is defined
+
+- debug:
+    msg: "ansible_port: {{ ansible_port }}"
+    verbosity: "{{ verbosity_level }}"
+  when: ansible_port is defined
+
+- debug:
+    msg: "ansible_ssh_private_key_file: {{ ansible_ssh_private_key_file }}"
+    verbosity: "{{ verbosity_level }}"
+  when: ansible_ssh_private_key_file is defined
+
+- debug:
+    msg: "ansible_ssh_common_args: {{ ansible_ssh_common_args }}"
+    verbosity: "{{ verbosity_level }}"
+  when: ansible_ssh_common_args is defined
+
+- debug:
+    msg: "ansible_ssh_extra_args: {{ ansible_ssh_extra_args }}"
+    verbosity: "{{ verbosity_level }}"
+  when: ansible_ssh_extra_args is defined
+
+- debug:
+    msg: "ansible_ssh_pipelining: {{ ansible_ssh_pipelining }}"
+    verbosity: "{{ verbosity_level }}"
+  when: ansible_ssh_pipelining is defined
+
+- debug:
+    msg: "ansible_sftp_extra_args: {{ ansible_sftp_extra_args }}"
+    verbosity: "{{ verbosity_level }}"
+  when: ansible_sftp_extra_args is defined
+
+- debug:
+    msg: "ansible_scp_extra_args: {{ ansible_scp_extra_args }}"
+    verbosity: "{{ verbosity_level }}"
+  when: ansible_scp_extra_args is defined
+
+- debug:
+    msg: "ansible_become: {{ ansible_become }}"
+    verbosity: "{{ verbosity_level }}"
+  when: ansible_become is defined
+
+- debug:
+    msg: "ansible_become_method: {{ ansible_become_method }}"
+    verbosity: "{{ verbosity_level }}"
+  when: ansible_become_method is defined
+
+- debug:
+    msg: "ansible_become_user: {{ ansible_become_user }}"
+    verbosity: "{{ verbosity_level }}"
+  when: ansible_become_user is defined
