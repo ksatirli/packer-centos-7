@@ -70,3 +70,8 @@ packer_cache/
 
 # For built boxes
 *.box
+
+
+### Ansible ###
+*.retry
+files/roles/
