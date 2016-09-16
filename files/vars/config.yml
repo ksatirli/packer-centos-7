@@ -7,10 +7,13 @@
 
   packages:
     os:
+      - bind-utils
       - curl
       - git
       - htop
+      - jq
       - mc
       - mlocate
       - screen
+      - telnet
       - tree
