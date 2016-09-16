@@ -14,25 +14,38 @@
         verbosity_level: "{{ config.verbosity_level }}"
 
   tasks:
-    - selinux:
+    - name: set SELinux policy
+      selinux:
         policy: "{{ config.selinux_policy | default(omit) }}"
         state: "{{ config.selinux_level }}"
       tags:
         - selinux
 
-    - yum:
+    - name: enable EPEL repository
+      yum:
+        name: "epel-release"
+        state: latest
+      with_items: "{{ packages.os }}"
+      tags:
+        - yum
+        - yum_epel
+
+    - name:
+      yum:
         name: "{{ item }}"
         state: latest
       with_items: "{{ packages.os }}"
       tags:
         - yum
+        - yum_base
 
-    - yum:
+    - name: update all installed packages to latest version
+      yum:
         name: "*"
         state: latest
       tags:
         - yum_update_all
 
   # post_tasks:
-  #   -
+  #   - name: clean disk 
   #     include: ./roles/diskcleanup/tasks/main.yml
