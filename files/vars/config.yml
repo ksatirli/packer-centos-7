@@ -9,14 +9,19 @@
       dest: /home/centos/build-information.txt
 
   packages:
-    os:
+    base:
       - bind-utils
       - curl
       - git
       - htop
       - jq
+      - man
       - mc
       - mlocate
+      - nano
+      - rsync
       - screen
       - telnet
       - tree
+      - vim-enhanced
+      - wget

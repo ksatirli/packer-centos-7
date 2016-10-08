@@ -31,7 +31,6 @@
       yum:
         name: "epel-release"
         state: latest
-      with_items: "{{ packages.os }}"
       tags:
         - yum
         - yum_epel
@@ -40,7 +39,7 @@
       yum:
         name: "{{ item }}"
         state: latest
-      with_items: "{{ packages.os }}"
+      with_items: "{{ packages.base }}"
       tags:
         - yum
         - yum_base
@@ -53,5 +52,5 @@
         - yum_update_all
 
   # post_tasks:
-  #   - name: clean disk 
+  #   - name: clean disk
   #     include: ./roles/diskcleanup/tasks/main.yml
