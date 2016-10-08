@@ -51,6 +51,9 @@
       tags:
         - yum_update_all
 
-  # post_tasks:
+  post_tasks:
+    - name: clean YUM cache
+      command: yum clean all
+
   #   - name: clean disk
   #     include: ./roles/diskcleanup/tasks/main.yml

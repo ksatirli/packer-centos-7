@@ -168,7 +168,7 @@ endif
 
 .PHONY: build
 build:
-	echo && \
+	@echo && \
 	echo "Building image using \`$(SOURCE_AMI)\`" && \
 	echo && \
 	$(PACKER) \
