@@ -1,0 +1,11 @@
+--------------------------------------------------------------------------------
+
+  This AMI has been pre-configured by Cultivated Ops.
+
+  Information:
+    Type:         {{ build_type }}
+    Description:  {{ build_desc }}
+
+  See https://cultivatedops.io/packer-images/{{ build_slug }} for more information.
+
+--------------------------------------------------------------------------------
