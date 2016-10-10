@@ -26,6 +26,7 @@ AMI_SLUG = centos-7
 ANSIBLE_GROUP = packer
 ANSIBLE_VERBOSITY_LEVEL = vv
 ANSIBLE_TAGS_SKIP =
+AWS_PROFILE_STRING = cultivatedops
 FORCE_DEREGISTER = false
 INSTANCE_TYPE = m3.medium
 PLAYBOOK_FILE = ./files/playbooks/base.yml
@@ -101,23 +102,26 @@ force:
 	@echo "$(COLOR_WARN)WARN: this will overwrite existing artifacts.$(COLOR_OFF)"
 	@echo
 
-PACKER=packer \
-	build \
-		$(PACKER_DEBUG) \
-		$(PACKER_FORCE) \
-		-var "ansible_verbosity_level=$(ANSIBLE_VERBOSITY_LEVEL)" \
-		-var "ansible_tags_skip=$(ANSIBLE_TAGS_SKIP)" \
-		-var "force_deregister=$(FORCE_DEREGISTER)" \
-		-var "instance_type=$(INSTANCE_TYPE)" \
-		-var "region=$(REGION)" \
-		-var "sftp_command=$(SFTP_COMMAND)" \
-		-var "spot_price=$(SPOT_PRICE)" \
-		-var "spot_price_auto_product=$(SPOT_PRICE_AUTO_PRODUCT)" \
-		-var "ssh_username=$(SSH_USERNAME)" \
-		-var "ssh_pty=$(SSH_PTY)" \
-		-var "ssh_timeout=$(SSH_TIMEOUT)" \
-		-var "timestamp=$(TIMESTAMP)" \
-		-var "user_data_file=$(USER_DATA_FILE)"
+PACKER= \
+	export AWS_PROFILE="$(AWS_PROFILE_STRING)" && \
+	packer \
+		build \
+			$(PACKER_DEBUG) \
+			$(PACKER_FORCE) \
+			-var "ansible_group=$(ANSIBLE_GROUP)" \
+			-var "ansible_verbosity_level=$(ANSIBLE_VERBOSITY_LEVEL)" \
+			-var "ansible_tags_skip=$(ANSIBLE_TAGS_SKIP)" \
+			-var "force_deregister=$(FORCE_DEREGISTER)" \
+			-var "instance_type=$(INSTANCE_TYPE)" \
+			-var "region=$(REGION)" \
+			-var "sftp_command=$(SFTP_COMMAND)" \
+			-var "spot_price=$(SPOT_PRICE)" \
+			-var "spot_price_auto_product=$(SPOT_PRICE_AUTO_PRODUCT)" \
+			-var "ssh_username=$(SSH_USERNAME)" \
+			-var "ssh_pty=$(SSH_PTY)" \
+			-var "ssh_timeout=$(SSH_TIMEOUT)" \
+			-var "timestamp=$(TIMESTAMP)" \
+			-var "user_data_file=$(USER_DATA_FILE)"
 
 .PHONY: check
 check:
@@ -133,7 +137,7 @@ ifeq ($(PACKER_AVAILABLE), true)
 	@echo "$(SIGN_OK) found version \"$(PACKER_VERSION)\""
 else
 	@echo "$(SIGN_ERR) unable to find \"packer\""
-	@EXIT_WITH_ERROR=true
+	@EXIT_WITH_ERROR = true
 endif
 # END: check for `packer` availability
 
@@ -145,7 +149,7 @@ ifeq ($(AWSCLI_AVAILABLE), true)
 	@echo "$(SIGN_OK) found binary at \"$(AWSCLI_PATH)\""
 else
 	@echo "$(SIGN_ERR) unable to find \"aws\""
-	@EXIT_WITH_ERROR=true
+	@EXIT_WITH_ERROR = true
 endif
 # END: check for `aws` availability
 
@@ -157,7 +161,7 @@ ifeq ($(JQ_AVAILABLE), true)
 	@echo "$(SIGN_OK) found binary at \"$(JQ_PATH)\""
 else
 	@echo "$(SIGN_ERR) unable to find \"jq\""
-	@EXIT_WITH_ERROR=true
+	@EXIT_WITH_ERROR = true
 endif
 # END: check for `jq` availability
 
