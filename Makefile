@@ -30,6 +30,7 @@ AWS_PROFILE_STRING = cultivatedops
 FORCE_DEREGISTER = false
 INSTANCE_TYPE = m3.medium
 PLAYBOOK_FILE = ./files/playbooks/base.yml
+RSPEC_TARGET = base
 REGION = eu-west-1
 SFTP_COMMAND = /usr/libexec/openssh/sftp-server -e
 SSH_PTY = false
@@ -181,5 +182,6 @@ build:
 		-var "ami_description=$(AMI_DESCRIPTION)" \
 		-var "ami_slug=$(AMI_SLUG)" \
 		-var "playbook_file=$(PLAYBOOK_FILE)" \
+		-var "rspec_target=$(RSPEC_TARGET)" \
 		-var "source_ami=$(SOURCE_AMI)" \
 		"image.json"

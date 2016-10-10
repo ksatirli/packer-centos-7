@@ -40,6 +40,10 @@
        "ANSIBLE_NOCOLOR=True",
        "ANSIBLE_SSH_ARGS='-o ForwardAgent=no -o ControlMaster=auto -o ControlPersist=yes'"
      ]
+    }, {
+      "type": "serverspec",
+      "rake_file": "Rakefile",
+      "rake_task": "serverspec:{{ user `rspec_target` }}"
     }
   ]
 
