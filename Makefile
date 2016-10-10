@@ -23,6 +23,7 @@ SIGN_ERR = $(COLOR_ERR)  ✗$(COLOR_OFF)
 AMI_DESCRIPTION = CentOS 7.x-based image with extra hardening
 AMI_NAME = cltvt-$(AMI_SLUG)
 AMI_SLUG = centos-7
+ANSIBLE_GROUP = packer
 ANSIBLE_VERBOSITY_LEVEL = vv
 ANSIBLE_TAGS_SKIP =
 FORCE_DEREGISTER = false
