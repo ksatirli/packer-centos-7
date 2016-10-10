@@ -38,7 +38,7 @@ SSH_TIMEOUT = 5m
 SSH_USERNAME = centos
 SOURCE_AMI = ami-7abd0209
 SPOT_PRICE = 0
-SPOT_PRICE_AUTO_PRODUCT = Linux/UNIX
+SPOT_PRICE_AUTO_PRODUCT = Linux/UNIX (Amazon VPC)
 TIMESTAMP = $(strip $(shell date +%s))
 USER_DATA_FILE = ./files/scripts/user-data.sh
 
