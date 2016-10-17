@@ -3,6 +3,7 @@
   This AMI has been pre-configured by Cultivated Ops.
 
   Information:
+    Region:       {{ build_region }}
     Type:         {{ build_type }}
     Description:  {{ build_desc }}
 
