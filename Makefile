@@ -20,28 +20,30 @@ SIGN_ERR = $(COLOR_ERR)  ✗$(COLOR_OFF)
 ###
 .DEFAULT_GOAL := help
 
-AMI_DESCRIPTION = CentOS 7.x-based image with extra hardening
-AMI_NAME = cltvt-$(AMI_SLUG)
 AMI_SLUG = centos-7
 ANSIBLE_GROUP = packer
 ANSIBLE_VERBOSITY_LEVEL = vv
 ANSIBLE_TAGS_SKIP =
-AWS_PROFILE_STRING = cultivatedops
+AWS_PROFILE = cultivatedops
 AWS_REGION = eu-west-1
 FORCE_DEREGISTER = false
 INSTANCE_TYPE = m3.medium
-PLAYBOOK_FILE = ./files/playbooks/base.yml
-RSPEC_TARGET = base
-REGION = eu-west-1
+PLAYBOOKS_DIR = ./files/playbooks
 SFTP_COMMAND = /usr/libexec/openssh/sftp-server -e
 SSH_PTY = false
 SSH_TIMEOUT = 5m
 SSH_USERNAME = centos
-SOURCE_AMI = ami-7abd0209
 SPOT_PRICE = 0
 SPOT_PRICE_AUTO_PRODUCT = Linux/UNIX (Amazon VPC)
 TIMESTAMP = $(strip $(shell date +%s))
 USER_DATA_FILE = ./files/scripts/user-data.sh
+
+AMI_SLUG_BASE = base
+AMI_DESCRIPTION_BASE = CentOS 7.x-based image with extra hardening
+AMI_NAME_BASE = cltvt-$(AMI_SLUG)-$(AMI_SLUG_BASE)
+PLAYBOOK_FILE_BASE = $(PLAYBOOKS_DIR)/$(AMI_SLUG_BASE).yml
+RSPEC_TARGET_BASE = $(AMI_SLUG_BASE)
+SOURCE_AMI_BASE = ami-7abd0209
 
 # check for availability of Packer
 ifeq ($(shell which packer >/dev/null 2>&1; echo $$?), 1)
@@ -78,17 +80,18 @@ endif
 help:
 	@echo
 	@echo "$(COLOR_BRIGHT)  CULTIVATED OPS$(COLOR_OFF)"
-	@echo "$(COLOR_MUTE)  Packer Image for \`$(AMI_NAME)\`$(COLOR_OFF)"
+	@echo "$(COLOR_MUTE)  Packer Image for \`$(AMI_SLUG)\`$(COLOR_OFF)"
 	@echo
 	@echo	"$(COLOR_BRIGHT)   Options:$(COLOR_OFF)"
-	@echo "     make check $(COLOR_MUTE)........$(COLOR_OFF) checks if all local dependencies are available"
+	@echo "     make check $(COLOR_MUTE).........$(COLOR_OFF) checks if all local dependencies are available"
 	@echo
-	@echo "     make build $(COLOR_MUTE).........$(COLOR_OFF) builds image"
-	@echo "     make debug build $(COLOR_MUTE)...$(COLOR_OFF) builds image in debug mode"
-	@echo "     make force build $(COLOR_MUTE)...$(COLOR_OFF) builds image in forced mode*"
+	@echo "     make $(AMI_SLUG_BASE) $(COLOR_MUTE)..........$(COLOR_OFF) builds \`$(AMI_SLUG_BASE)\` image"
+	@echo
+	@echo "     make debug target $(COLOR_MUTE)..$(COLOR_OFF) builds image in debug mode"
+	@echo "     make force target $(COLOR_MUTE)..$(COLOR_OFF) builds image in forced mode"
 	@echo
 	@echo	"$(COLOR_BRIGHT)   Notes:$(COLOR_OFF)"
-	@echo "     \"force\" mode overwrites any existing artifacts."
+	@echo "     $(COLOR_WARN)\"force\"$(COLOR_OFF) mode overwrites any existing artifacts with the same name."
 	@echo
 
 .PHONY: debug
@@ -105,7 +108,7 @@ force:
 	@echo
 
 PACKER= \
-	export AWS_PROFILE="$(AWS_PROFILE_STRING)" && \
+	export AWS_PROFILE="$(AWS_PROFILE)" && \
 	packer \
 		build \
 			$(PACKER_DEBUG) \
@@ -173,8 +176,20 @@ ifeq ($(EXIT_WITH_ERROR), true)
 	exit 1
 endif
 
-.PHONY: build
-build:
+.PHONY: base
+base:
+	@echo && \
+	echo "Building \`$(AMI_SLUG_BASE)\` image using \`$(SOURCE_AMI_BASE)\`" && \
+	echo && \
+	$(PACKER) \
+		-var "ami_name=$(AMI_NAME_BASE)" \
+		-var "ami_description=$(AMI_DESCRIPTION_BASE)" \
+		-var "ami_slug=$(AMI_SLUG_BASE)" \
+		-var "playbook_file=$(PLAYBOOK_FILE_BASE)" \
+		-var "rspec_target=$(RSPEC_TARGET_BASE)" \
+		-var "source_ami=$(SOURCE_AMI_BASE)" \
+		"image.json"
+
 	@echo && \
 	echo "Building image using \`$(SOURCE_AMI)\`" && \
 	echo && \
