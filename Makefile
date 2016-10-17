@@ -45,6 +45,13 @@ PLAYBOOK_FILE_BASE = $(PLAYBOOKS_DIR)/$(AMI_SLUG_BASE).yml
 RSPEC_TARGET_BASE = $(AMI_SLUG_BASE)
 SOURCE_AMI_BASE = ami-7abd0209
 
+AMI_SLUG_SSM = ssm
+AMI_DESCRIPTION_SSM = $(AMI_DESCRIPTION_BASE) and Amazon SSM Agent
+AMI_NAME_SSM = cltvt-$(AMI_SLUG)-$(AMI_SLUG_SSM)
+PLAYBOOK_FILE_SSM = $(PLAYBOOKS_DIR)/$(AMI_SLUG_SSM).yml
+RSPEC_TARGET_SSM = $(AMI_SLUG_SSM)
+SOURCE_AMI_SSM = $(strip $(shell sh ./files/scripts/get-ami-id.sh "$(AWS_PROFILE)" "$(AWS_REGION)" "$(AMI_NAME_BASE)"))
+
 # check for availability of Packer
 ifeq ($(shell which packer >/dev/null 2>&1; echo $$?), 1)
 	PACKER_AVAILABLE = false
@@ -86,6 +93,7 @@ help:
 	@echo "     make check $(COLOR_MUTE).........$(COLOR_OFF) checks if all local dependencies are available"
 	@echo
 	@echo "     make $(AMI_SLUG_BASE) $(COLOR_MUTE)..........$(COLOR_OFF) builds \`$(AMI_SLUG_BASE)\` image"
+	@echo "     make $(AMI_SLUG_SSM) $(COLOR_MUTE)...........$(COLOR_OFF) builds \`$(AMI_SLUG_SSM)\` image"
 	@echo
 	@echo "     make debug target $(COLOR_MUTE)..$(COLOR_OFF) builds image in debug mode"
 	@echo "     make force target $(COLOR_MUTE)..$(COLOR_OFF) builds image in forced mode"
@@ -190,14 +198,16 @@ base:
 		-var "source_ami=$(SOURCE_AMI_BASE)" \
 		"image.json"
 
+.PHONY: ssm
+ssm:
 	@echo && \
-	echo "Building image using \`$(SOURCE_AMI)\`" && \
+	echo "Building \`$(AMI_SLUG_SSM)\` image using \`$(SOURCE_AMI_SSM)\`" && \
 	echo && \
 	$(PACKER) \
-		-var "ami_name=$(AMI_NAME)" \
-		-var "ami_description=$(AMI_DESCRIPTION)" \
-		-var "ami_slug=$(AMI_SLUG)" \
-		-var "playbook_file=$(PLAYBOOK_FILE)" \
-		-var "rspec_target=$(RSPEC_TARGET)" \
-		-var "source_ami=$(SOURCE_AMI)" \
+		-var "ami_name=$(AMI_NAME_SSM)" \
+		-var "ami_description=$(AMI_DESCRIPTION_SSM)" \
+		-var "ami_slug=$(AMI_SLUG_SSM)" \
+		-var "playbook_file=$(PLAYBOOK_FILE_SSM)" \
+		-var "rspec_target=$(RSPEC_TARGET_SSM)" \
+		-var "source_ami=$(SOURCE_AMI_SSM)" \
 		"image.json"
