@@ -34,6 +34,7 @@ AWS_PROFILE = cultivatedops
 AWS_REGION = eu-west-1
 FORCE_DEREGISTER = false
 INSTANCE_TYPE = m3.medium
+KEEP_RELEASES = 3
 ON_ERROR = ask
 PLAYBOOKS_DIR = ./files/playbooks
 PACKER_PLUGIN_PATH = $(HOME)/.packer.d/plugins

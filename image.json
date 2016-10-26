@@ -46,6 +46,12 @@
       "rake_file": "Rakefile",
       "rake_task": "serverspec:{{ user `rspec_target` }}"
     }
-  ]
+  ],
+  "post-processors":[{
+    "type": "amazon-ami-management",
+    "region": "{{ user `region` }}",
+    "identifier": "{{ user `ami_name` }}-*",
+    "keep_releases": "{{ user `keep_releases` }}"
+  }]
 
 }
