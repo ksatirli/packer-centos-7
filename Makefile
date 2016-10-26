@@ -23,7 +23,7 @@ SIGN_WARN = $(STYLE_WARN) !$(STYLE_OFF)
 .DEFAULT_GOAL := help
 
 AMI_SLUG = centos-7
-ANSIBLE_DEBUG = -
+ANSIBLE_DEBUG =
 ANSIBLE_GROUP = packer
 ANSIBLE_ROLE_FILE = ../vars/ansible-roles.yml
 ANSIBLE_ROLES_PATH = ../roles/
@@ -111,6 +111,15 @@ help:
 	@echo	"$(STYLE_BRIGHT) NOTES:$(STYLE_OFF)"
 	@echo "     $(STYLE_WARN)\"force\"$(STYLE_OFF) mode overwrites any existing artifacts with the same name."
 	@echo
+
+.PHONY: debug
+debug:
+	@echo "$(SIGN_WARN) The \`debug\` target is an application-specific switch."
+	@echo 
+	@echo "   * To enable debug mode in Packer, pass \`debug-packer\` before passing a target image"
+	@echo "   * To enable debug mode in Ansible, pass \`debug-ansible\` before passing a target image"
+	@echo
+	@exit 1
 
 .PHONY: debug-packer
 debug-packer:
@@ -213,8 +222,7 @@ install-dependencies:
 	echo  && \
 	ansible-playbook \
 		$(ANSIBLE_DEBUG) \
-		--extra-vars="ROLE_FILE=$(ANSIBLE_ROLE_FILE)" \
-		--extra-vars="ROLES_PATH=$(ANSIBLE_ROLES_PATH)" \
+		--extra-vars="role_file=$(ANSIBLE_ROLE_FILE) roles_path=$(ANSIBLE_ROLES_PATH)" \
 		"$(PLAYBOOKS_DIR)/prep-control-master.yml" && \
 	echo  && \
 	echo "$(SIGN_OK) installed Ansible Roles"

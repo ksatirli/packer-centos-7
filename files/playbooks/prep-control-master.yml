@@ -8,6 +8,6 @@
     - name: installing Ansible role(s)
       command: >
         ansible-galaxy
-          --roles-path="{{ ROLES_PATH }}"
-          --role-file="{{ ROLE_FILE }}"
+          --roles-path="{{ roles_path }}"
+          --role-file="{{ role_file }}"
           install
