@@ -7,3 +7,8 @@
   - # debug role, see https://galaxy.ansible.com/cultivatedops/diskcleanup/
     src: cultivatedops.diskcleanup
     name: diskcleanup
+
+  - # STIG role, see https://github.com/MindPointGroup/RHEL7-STIG/
+    src: git+https://github.com/MindPointGroup/RHEL7-STIG.git
+    name: rhel7-stig
+    version: 068135cc1ba549451088f000476b086f52c40a58
