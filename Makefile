@@ -34,11 +34,13 @@ AWS_PROFILE = cultivatedops
 AWS_REGION = eu-west-1
 FORCE_DEREGISTER = false
 INSTANCE_TYPE = m3.medium
+ON_ERROR = ask
 PLAYBOOKS_DIR = ./files/playbooks
 PACKER_PLUGIN_PATH = $(HOME)/.packer.d/plugins
 PACKER_POSTPROCESSOR_1 = "github.com/wata727/packer-post-processor-amazon-ami-management"
 PACKER_PROVISIONER_1 = "github.com/unifio/packer-provisioner-serverspec"
 SFTP_COMMAND = /usr/libexec/openssh/sftp-server -e
+SHUTDOWN_BEHAVIOUR = terminate
 SSH_PTY = false
 SSH_TIMEOUT = 5m
 SSH_USERNAME = centos
@@ -115,7 +117,7 @@ help:
 .PHONY: debug
 debug:
 	@echo "$(SIGN_WARN) The \`debug\` target is an application-specific switch."
-	@echo 
+	@echo
 	@echo "   * To enable debug mode in Packer, pass \`debug-packer\` before passing a target image"
 	@echo "   * To enable debug mode in Ansible, pass \`debug-ansible\` before passing a target image"
 	@echo
@@ -139,18 +141,24 @@ force:
 	@echo "$(STYLE_WARN)WARN: this will overwrite existing artifacts.$(STYLE_OFF)"
 	@echo
 
+.PHONY: on-error
+	$(eval PACKER_ONERROR := -on-error=$(ON_ERROR)) \
+	@echo "Setting on-error mode to \`$(ON_ERROR)\`"
+
 PACKER= \
 	export AWS_PROFILE="$(AWS_PROFILE)" && \
 	packer \
 		build \
 			$(PACKER_DEBUG) \
 			$(PACKER_FORCE) \
+			$(PACKER_ONERROR) \
 			-var "ansible_debug=$(ANSIBLE_DEBUG)" \
 			-var "ansible_group=$(ANSIBLE_GROUP)" \
 			-var "ansible_tags_skip=$(ANSIBLE_TAGS_SKIP)" \
 			-var "force_deregister=$(FORCE_DEREGISTER)" \
 			-var "instance_type=$(INSTANCE_TYPE)" \
 			-var "region=$(AWS_REGION)" \
+			-var "shutdown_behaviour=$(SHUTDOWN_BEHAVIOUR)" \
 			-var "sftp_command=$(SFTP_COMMAND)" \
 			-var "spot_price=$(SPOT_PRICE)" \
 			-var "spot_price_auto_product=$(SPOT_PRICE_AUTO_PRODUCT)" \
