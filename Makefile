@@ -35,6 +35,9 @@ AWS_REGION = eu-west-1
 FORCE_DEREGISTER = false
 INSTANCE_TYPE = m3.medium
 PLAYBOOKS_DIR = ./files/playbooks
+PACKER_PLUGIN_PATH = $(HOME)/.packer.d/plugins
+PACKER_POSTPROCESSOR_1 = "github.com/wata727/packer-post-processor-amazon-ami-management"
+PACKER_PROVISIONER_1 = "github.com/unifio/packer-provisioner-serverspec"
 SFTP_COMMAND = /usr/libexec/openssh/sftp-server -e
 SSH_PTY = false
 SSH_TIMEOUT = 5m
@@ -195,6 +198,26 @@ endif
 ifeq ($(EXIT_WITH_ERROR), true)
 	exit 1
 endif
+
+.PHONY: install-dependencies
+install-dependencies:
+	@echo && \
+	echo "Installing dependencies..." && \
+	echo && \
+	export GOPATH="$(HOME)/.go" && \
+	go get "$(PACKER_PROVISIONER_1)" && \
+	cp "$$GOPATH/bin/$(shell basename $(PACKER_PROVISIONER_1))" "$(PACKER_PLUGIN_PATH)" && \
+	go get "$(PACKER_POSTPROCESSOR_1)" && \
+	cp "$$GOPATH/bin/$(shell basename $(PACKER_PROVISIONER_1))" "$(PACKER_PLUGIN_PATH)" && \
+	echo "$(SIGN_OK) installed Packer plugins in \`$(PACKER_PLUGIN_PATH)\`" && \
+	echo  && \
+	ansible-playbook \
+		$(ANSIBLE_DEBUG) \
+		--extra-vars="ROLE_FILE=$(ANSIBLE_ROLE_FILE)" \
+		--extra-vars="ROLES_PATH=$(ANSIBLE_ROLES_PATH)" \
+		"$(PLAYBOOKS_DIR)/prep-control-master.yml" && \
+	echo  && \
+	echo "$(SIGN_OK) installed Ansible Roles"
 
 .PHONY: base
 base:
