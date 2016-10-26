@@ -30,7 +30,7 @@
         "{{ user `ansible_group` }}"
       ],
       "extra_arguments": [
-        "-{{ user `ansible_verbosity_level` }}",
+        "{{ user `ansible_debug` }}",
         "--skip-tags={{ user `ansible_tags_skip` }}",
         "--extra-vars",
         "build_region={{ user `region` }} build_type={{ user `ami_name` }} build_desc={{ user `ami_description` }} build_slug={{ user `ami_slug` }}"

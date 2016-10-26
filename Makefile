@@ -4,16 +4,18 @@
  # colors!
 ###
 # colorize some of the output, see http://dcmnt.me/1XYnkPe for more information
-COLOR_OFF = \x1b[0m
-COLOR_OK = \x1b[32;01m
-COLOR_ERR = \x1b[31;01m
-COLOR_WARN = \x1b[33;01m
-COLOR_MUTE = \x1b[30;01m
-COLOR_BRIGHT = \x1b[37;01m
-COLOR_OFF = \x1b[0m
+STYLE_OFF = \x1b[0m
+STYLE_OK = \x1b[32;01m
+STYLE_ERR = \x1b[31;01m
+STYLE_WARN = \x1b[33;01m
+STYLE_MUTE = \x1b[30;01m
+STYLE_BRIGHT = \x1b[37;01m
+STYLE_OFF = \x1b[0m
+STYLE_UNDERLINE = \x1b[4m
 
-SIGN_OK = $(COLOR_OK)  ✓$(COLOR_OFF)
-SIGN_ERR = $(COLOR_ERR)  ✗$(COLOR_OFF)
+SIGN_OK = $(STYLE_OK)  ✓$(STYLE_OFF)
+SIGN_ERR = $(STYLE_ERR)  ✗$(STYLE_OFF)
+SIGN_WARN = $(STYLE_WARN) !$(STYLE_OFF)
 
 ###
  # configuration
@@ -21,9 +23,12 @@ SIGN_ERR = $(COLOR_ERR)  ✗$(COLOR_OFF)
 .DEFAULT_GOAL := help
 
 AMI_SLUG = centos-7
+ANSIBLE_DEBUG = -
 ANSIBLE_GROUP = packer
 ANSIBLE_VERBOSITY_LEVEL = vv
 ANSIBLE_TAGS_SKIP =
+ANSIBLE_VERBOSITY_LEVEL = vv
+
 AWS_PROFILE = cultivatedops
 AWS_REGION = eu-west-1
 FORCE_DEREGISTER = false
@@ -86,33 +91,39 @@ endif
 .PHONY: help
 help:
 	@echo
-	@echo "$(COLOR_BRIGHT)  CULTIVATED OPS$(COLOR_OFF)"
-	@echo "$(COLOR_MUTE)  Packer Image for \`$(AMI_SLUG)\`$(COLOR_OFF)"
+	@echo "$(STYLE_BRIGHT)CULTIVATED OPS$(STYLE_OFF)"
+	@echo "$(STYLE_MUTE)  Packer Image for \`$(AMI_SLUG)\`$(STYLE_OFF)"
 	@echo
-	@echo	"$(COLOR_BRIGHT)   Options:$(COLOR_OFF)"
-	@echo "     make check $(COLOR_MUTE).........$(COLOR_OFF) checks if all local dependencies are available"
+	@echo	"$(STYLE_BRIGHT) OPTIONS:$(STYLE_OFF)"
+	@echo "     make check $(STYLE_MUTE)..................$(STYLE_OFF) checks if all local dependencies are available"
 	@echo
-	@echo "     make $(AMI_SLUG_BASE) $(COLOR_MUTE)..........$(COLOR_OFF) builds \`$(AMI_SLUG_BASE)\` image"
-	@echo "     make $(AMI_SLUG_SSM) $(COLOR_MUTE)...........$(COLOR_OFF) builds \`$(AMI_SLUG_SSM)\` image"
+	@echo "     make $(STYLE_UNDERLINE)$(AMI_SLUG_BASE)$(STYLE_OFF) $(STYLE_MUTE)...................$(STYLE_OFF) builds \`$(AMI_SLUG_BASE)\` image"
+	@echo "     make $(STYLE_UNDERLINE)$(AMI_SLUG_SSM)$(STYLE_OFF) $(STYLE_MUTE)....................$(STYLE_OFF) builds \`$(AMI_SLUG_SSM)\` image"
 	@echo
-	@echo "     make debug target $(COLOR_MUTE)..$(COLOR_OFF) builds image in debug mode"
-	@echo "     make force target $(COLOR_MUTE)..$(COLOR_OFF) builds image in forced mode"
+	@echo "     make debug-packer $(STYLE_UNDERLINE)target$(STYLE_OFF) $(STYLE_MUTE)....$(STYLE_OFF) builds target image and enables debug mode for Packer"
+	@echo "     make debug-ansible $(STYLE_UNDERLINE)target$(STYLE_OFF) $(STYLE_MUTE)...$(STYLE_OFF) builds target image and enables debug mode for Ansible"
+	@echo "     make force $(STYLE_UNDERLINE)target$(STYLE_OFF) $(STYLE_MUTE)...........$(STYLE_OFF) builds target image in forced mode"
 	@echo
-	@echo	"$(COLOR_BRIGHT)   Notes:$(COLOR_OFF)"
-	@echo "     $(COLOR_WARN)\"force\"$(COLOR_OFF) mode overwrites any existing artifacts with the same name."
+	@echo	"$(STYLE_BRIGHT) NOTES:$(STYLE_OFF)"
+	@echo "     $(STYLE_WARN)\"force\"$(STYLE_OFF) mode overwrites any existing artifacts with the same name."
 	@echo
 
-.PHONY: debug
-debug:
+.PHONY: debug-packer
+debug-packer:
 	$(eval PACKER_DEBUG := -debug)
-	@echo "Enabling debug mode for Packer"
+	@echo "$(SIGN_WARN) Enabling debug mode for Packer"
+
+.PHONY: debug-ansible
+debug-ansible:
+	$(eval ANSIBLE_DEBUG := -$(ANSIBLE_VERBOSITY_LEVEL))
+	@echo "$(SIGN_WARN) Enabling debug mode for Ansible"
 
 .PHONY: force
 force:
 	$(eval PACKER_FORCE := -force)
 	$(EVAL FORCE_DEREGISTER := true)
 	@echo "Enabling forced building mode for Packer"
-	@echo "$(COLOR_WARN)WARN: this will overwrite existing artifacts.$(COLOR_OFF)"
+	@echo "$(STYLE_WARN)WARN: this will overwrite existing artifacts.$(STYLE_OFF)"
 	@echo
 
 PACKER= \
@@ -121,8 +132,8 @@ PACKER= \
 		build \
 			$(PACKER_DEBUG) \
 			$(PACKER_FORCE) \
+			-var "ansible_debug=$(ANSIBLE_DEBUG)" \
 			-var "ansible_group=$(ANSIBLE_GROUP)" \
-			-var "ansible_verbosity_level=$(ANSIBLE_VERBOSITY_LEVEL)" \
 			-var "ansible_tags_skip=$(ANSIBLE_TAGS_SKIP)" \
 			-var "force_deregister=$(FORCE_DEREGISTER)" \
 			-var "instance_type=$(INSTANCE_TYPE)" \
