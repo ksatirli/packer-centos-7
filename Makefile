@@ -158,6 +158,7 @@ PACKER= \
 			-var "ansible_tags_skip=$(ANSIBLE_TAGS_SKIP)" \
 			-var "force_deregister=$(FORCE_DEREGISTER)" \
 			-var "instance_type=$(INSTANCE_TYPE)" \
+			-var "keep_releases=$(KEEP_RELEASES)" \
 			-var "region=$(AWS_REGION)" \
 			-var "shutdown_behaviour=$(SHUTDOWN_BEHAVIOUR)" \
 			-var "sftp_command=$(SFTP_COMMAND)" \
