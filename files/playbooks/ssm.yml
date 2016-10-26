@@ -1,0 +1,36 @@
+---
+
+- name: provisioning base
+  hosts: packer
+  become: true
+  remote_user: centos
+  vars_files:
+    - ../vars/config.yml
+
+  pre_tasks:
+    - name: create URL for Amazon SSM Agent RPM
+      set_fact:
+        agent_rpm_url: "https://amazon-ssm-{{ build_region }}.s3.amazonaws.com/latest/linux_amd64/amazon-ssm-agent.rpm"
+
+  tasks:
+    - name: set build information
+      template:
+        dest: "{{ config.build_information.dest }}"
+        force: true
+        src: "{{ config.build_information.src }}"
+
+    - name: install Amazon SSM Agent
+      yum:
+        name: "{{ agent_rpm_url }}"
+        state: present
+      tags:
+        - yum
+        - yum_ssm
+
+    - name: check status of Amazon SSM Agent
+      service:
+        enabled: true
+        name: amazon-ssm-agent
+        state: started
+      tags:
+        - service_ssm_start

@@ -11,4 +11,10 @@ namespace :serverspec do
     t.pattern = 'spec/base_spec.rb'
     t.verbose = true
   end
+
+  desc 'Run Serverspec tests for `ssm`'
+  RSpec::Core::RakeTask.new('ssm') do |t|
+    t.pattern = 'spec/ssm_spec.rb'
+    t.verbose = true
+  end
 end

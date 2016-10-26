@@ -15,8 +15,8 @@ describe 'Build Information' do
     it { should_not be_executable }
     it { should be_readable }
     its(:size) { should > 0 }
+  end
 end
-
 
 # YUM package tests
 describe 'YUM packages' do
