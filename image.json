@@ -15,7 +15,8 @@
       "ssh_timeout": "{{ user `ssh_timeout` }}",
       "ssh_username": "{{ user `ssh_username` }}",
       "tags": {
-        "Name": "{{ user `ami_name` }}"
+        "Name": "{{ user `ami_name` }}",
+        "Amazon_AMI_Management_Identifier": "{{ user `ami_name` }}"
       },
       "user_data_file": "{{ user `user_data_file` }}"
     }
@@ -50,7 +51,7 @@
   "post-processors":[{
     "type": "amazon-ami-management",
     "region": "{{ user `region` }}",
-    "identifier": "{{ user `ami_name` }}-*",
+    "identifier": "{{ user `ami_name` }}",
     "keep_releases": "{{ user `keep_releases` }}"
   }]
 
