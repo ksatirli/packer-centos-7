@@ -42,6 +42,13 @@ PACKER_POSTPROCESSOR_1 = "github.com/wata727/packer-post-processor-amazon-ami-ma
 PACKER_PROVISIONER_1 = "github.com/unifio/packer-provisioner-serverspec"
 SFTP_COMMAND = /usr/libexec/openssh/sftp-server -e
 SHUTDOWN_BEHAVIOUR = terminate
+SOURCE_AMI_MOST_RECENT = true
+SOURCE_AMI_VIRTUALIZATION_TYPE = hvm
+SOURCE_AMI_ROOT_DEVICE_TYPE = ebs
+SOURCE_AMI_NAME_BASE = CentOS Linux 7 x86_64 HVM EBS 1602
+SOURCE_AMI_OWNER_BASE = 679593333241
+SOURCE_AMI_NAME_SSM = $(AMI_NAME_BASE)
+SOURCE_AMI_OWNER_SSM = 669117663053
 SSH_PTY = false
 SSH_TIMEOUT = 5m
 SSH_USERNAME = centos
@@ -55,14 +62,13 @@ AMI_DESCRIPTION_BASE = CentOS 7.x-based image with extra hardening
 AMI_NAME_BASE = cltvt-$(AMI_SLUG)-$(AMI_SLUG_BASE)
 PLAYBOOK_FILE_BASE = $(PLAYBOOKS_DIR)/$(AMI_SLUG_BASE).yml
 RSPEC_TARGET_BASE = $(AMI_SLUG_BASE)
-SOURCE_AMI_BASE = ami-7abd0209
 
 AMI_SLUG_SSM = ssm
 AMI_DESCRIPTION_SSM = $(AMI_DESCRIPTION_BASE) and Amazon SSM Agent
 AMI_NAME_SSM = cltvt-$(AMI_SLUG)-$(AMI_SLUG_SSM)
 PLAYBOOK_FILE_SSM = $(PLAYBOOKS_DIR)/$(AMI_SLUG_SSM).yml
 RSPEC_TARGET_SSM = $(AMI_SLUG_SSM)
-SOURCE_AMI_SSM = $(strip $(shell sh ./files/scripts/get-ami-id.sh "$(AWS_PROFILE)" "$(AWS_REGION)" "$(AMI_NAME_BASE)"))
+# SOURCE_AMI_SSM = $(strip $(shell sh ./files/scripts/get-ami-id.sh "$(AWS_PROFILE)" "$(AWS_REGION)" "$(AMI_NAME_BASE)"))
 
 # check for availability of Packer
 ifeq ($(shell which packer >/dev/null 2>&1; echo $$?), 1)
@@ -163,6 +169,9 @@ PACKER= \
 			-var "region=$(AWS_REGION)" \
 			-var "shutdown_behaviour=$(SHUTDOWN_BEHAVIOUR)" \
 			-var "sftp_command=$(SFTP_COMMAND)" \
+      -var "source_ami_most_recent=$(SOURCE_AMI_MOST_RECENT)" \
+      -var "source_ami_virtualization_type=$(SOURCE_AMI_VIRTUALIZATION_TYPE)" \
+      -var "source_ami_root_device_type=$(SOURCE_AMI_ROOT_DEVICE_TYPE)" \
 			-var "spot_price=$(SPOT_PRICE)" \
 			-var "spot_price_auto_product=$(SPOT_PRICE_AUTO_PRODUCT)" \
 			-var "ssh_username=$(SSH_USERNAME)" \
@@ -241,21 +250,22 @@ install-dependencies:
 .PHONY: base
 base:
 	@echo && \
-	echo "Building \`$(AMI_SLUG_BASE)\` image using \`$(SOURCE_AMI_BASE)\`" && \
+	echo "Building \`$(AMI_SLUG_BASE)\` image" && \
 	echo && \
 	$(PACKER) \
-		-var "ami_name=$(AMI_NAME_BASE)" \
+		-var "ami_name=$(AMI_NAME_BASE)$(AMI_NAME_SUFFIX_ENCRYPTED)" \
 		-var "ami_description=$(AMI_DESCRIPTION_BASE)" \
 		-var "ami_slug=$(AMI_SLUG_BASE)" \
 		-var "playbook_file=$(PLAYBOOK_FILE_BASE)" \
 		-var "rspec_target=$(RSPEC_TARGET_BASE)" \
-		-var "source_ami=$(SOURCE_AMI_BASE)" \
+    -var "source_ami_name=$(SOURCE_AMI_NAME_BASE)" \
+    -var "source_ami_owner=$(SOURCE_AMI_OWNER_BASE)" \
 		"image.json"
 
 .PHONY: ssm
 ssm:
 	@echo && \
-	echo "Building \`$(AMI_SLUG_SSM)\` image using \`$(SOURCE_AMI_SSM)\`" && \
+	echo "Building \`$(AMI_SLUG_SSM)\` image" && \
 	echo && \
 	$(PACKER) \
 		-var "ami_name=$(AMI_NAME_SSM)" \
@@ -263,5 +273,6 @@ ssm:
 		-var "ami_slug=$(AMI_SLUG_SSM)" \
 		-var "playbook_file=$(PLAYBOOK_FILE_SSM)" \
 		-var "rspec_target=$(RSPEC_TARGET_SSM)" \
-		-var "source_ami=$(SOURCE_AMI_SSM)" \
+		-var "source_ami_name=$(SOURCE_AMI_NAME_SSM)" \
+    -var "source_ami_owner=$(SOURCE_AMI_OWNER_SSM)" \
 		"image.json"

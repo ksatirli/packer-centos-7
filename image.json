@@ -8,7 +8,15 @@
       "instance_type": "{{ user `instance_type` }}",
       "region": "{{ user `region` }}",
       "shutdown_behaviour": "{{ user `shutdown_behaviour` }}",
-      "source_ami": "{{ user `source_ami` }}",
+      "source_ami_filter": {
+        "filters": {
+          "virtualization-type": "{{ user `source_ami_virtualization_type` }}",
+          "name": "{{ user `source_ami_name` }}*",
+          "root-device-type": "{{ user `source_ami_root_device_type` }}"
+        },
+        "owners": ["{{ user `source_ami_owner` }}"],
+        "most_recent": "{{ user `source_ami_most_recent` }}"
+      },
       "spot_price": "{{ user `spot_price` }}",
       "spot_price_auto_product": "{{ user `spot_price_auto_product` }}",
       "ssh_pty": "{{ user `ssh_pty` }}",
@@ -32,7 +40,7 @@
         "{{ user `ansible_group` }}"
       ],
       "extra_arguments": [
-        "-{{ user `ansible_debug` }}",
+        "{{ user `ansible_debug` }}",
         "--skip-tags={{ user `ansible_tags_skip` }}",
         "--extra-vars",
         "build_region={{ user `region` }} build_type={{ user `ami_name` }} build_desc={{ user `ami_description` }} build_slug={{ user `ami_slug` }}"
