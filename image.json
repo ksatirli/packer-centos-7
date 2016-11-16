@@ -5,6 +5,7 @@
 
       "ami_description": "{{ user `ami_description` }}",
       "ami_name": "{{ user `ami_name` }}-{{ user `timestamp` }}",
+      "encrypt_boot": "{{ user `encrypt_boot` }}",
       "instance_type": "{{ user `instance_type` }}",
       "region": "{{ user `region` }}",
       "shutdown_behaviour": "{{ user `shutdown_behaviour` }}",

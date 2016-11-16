@@ -23,6 +23,7 @@ SIGN_WARN = $(STYLE_WARN) !$(STYLE_OFF)
 .DEFAULT_GOAL := help
 
 AMI_SLUG = centos-7
+AMI_NAME_SUFFIX_ENCRYPTED = -encrypted
 ANSIBLE_DEBUG =
 ANSIBLE_GROUP = packer
 ANSIBLE_ROLE_FILE = ../vars/ansible-roles.yml
@@ -32,6 +33,7 @@ ANSIBLE_VERBOSITY_LEVEL = vv
 AWS_PROFILE = cultivatedops
 AWS_REGION = eu-west-1
 DELETE_ON_TERMINATION = true
+ENCRYPT_BOOT = false
 FORCE_DEREGISTER = false
 INSTANCE_TYPE = m3.medium
 KEEP_RELEASES = 3
@@ -115,10 +117,12 @@ help:
 	@echo
 	@echo "     make debug-packer $(STYLE_UNDERLINE)target$(STYLE_OFF) $(STYLE_MUTE)....$(STYLE_OFF) builds target image and enables debug mode for Packer"
 	@echo "     make debug-ansible $(STYLE_UNDERLINE)target$(STYLE_OFF) $(STYLE_MUTE)...$(STYLE_OFF) builds target image and enables debug mode for Ansible"
+	@echo "     make encrypted $(STYLE_UNDERLINE)target$(STYLE_OFF) $(STYLE_MUTE).......$(STYLE_OFF) builds target image and enables debug mode for Packer"
 	@echo "     make force $(STYLE_UNDERLINE)target$(STYLE_OFF) $(STYLE_MUTE)...........$(STYLE_OFF) builds target image in forced mode"
 	@echo
 	@echo	"$(STYLE_BRIGHT) NOTES:$(STYLE_OFF)"
 	@echo "     $(STYLE_WARN)\"force\"$(STYLE_OFF) mode overwrites any existing artifacts with the same name."
+	@echo "     $(STYLE_WARN)\"encrypted\"$(STYLE_OFF) mode create a copy of the AMI with an encrypted boot volume."
 	@echo
 
 .PHONY: debug
@@ -139,6 +143,11 @@ debug-packer:
 debug-ansible:
 	$(eval ANSIBLE_DEBUG := -$(ANSIBLE_VERBOSITY_LEVEL))
 	@echo "$(SIGN_WARN) Enabling debug mode for Ansible"
+
+.PHONY: encrypted
+encrypted:
+	$(eval ENCRYPT_BOOT = true)
+	@echo "$(SIGN_WARN) Enabling encryption for EBS volumes"
 
 .PHONY: force
 force:
@@ -163,6 +172,7 @@ PACKER= \
 			-var "ansible_group=$(ANSIBLE_GROUP)" \
 			-var "ansible_tags_skip=$(ANSIBLE_TAGS_SKIP)" \
 			-var "delete_on_termination=$(DELETE_ON_TERMINATION)" \
+			-var "encrypt_boot=$(ENCRYPT_BOOT)" \
 			-var "force_deregister=$(FORCE_DEREGISTER)" \
 			-var "instance_type=$(INSTANCE_TYPE)" \
 			-var "keep_releases=$(KEEP_RELEASES)" \
