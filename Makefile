@@ -70,7 +70,6 @@ AMI_DESCRIPTION_SSM = $(AMI_DESCRIPTION_BASE) and Amazon SSM Agent
 AMI_NAME_SSM = cltvt-$(AMI_SLUG)-$(AMI_SLUG_SSM)
 PLAYBOOK_FILE_SSM = $(PLAYBOOKS_DIR)/$(AMI_SLUG_SSM).yml
 RSPEC_TARGET_SSM = $(AMI_SLUG_SSM)
-# SOURCE_AMI_SSM = $(strip $(shell sh ./files/scripts/get-ami-id.sh "$(AWS_PROFILE)" "$(AWS_REGION)" "$(AMI_NAME_BASE)"))
 
 # check for availability of Packer
 ifeq ($(shell which packer >/dev/null 2>&1; echo $$?), 1)
@@ -90,15 +89,6 @@ else
 	AWSCLI_PATH = $(shell which aws)
 endif
 # end: check for availability of AWS CLI
-
-# check for availability of jq
-ifeq ($(shell which jq >/dev/null 2>&1; echo $$?), 1)
-	JQ_AVAILABLE = false
-else
-	JQ_AVAILABLE = true
-	JQ_PATH=$(shell which jq)
-endif
-# end: check for availability of Packer
 
 ###
  # Targets
@@ -219,18 +209,6 @@ else
 	@EXIT_WITH_ERROR = true
 endif
 # END: check for `aws` availability
-
-# BEGIN: check for `jq` availability
-	@echo
-	@echo "jq"
-
-ifeq ($(JQ_AVAILABLE), true)
-	@echo "$(SIGN_OK) found binary at \"$(JQ_PATH)\""
-else
-	@echo "$(SIGN_ERR) unable to find \"jq\""
-	@EXIT_WITH_ERROR = true
-endif
-# END: check for `jq` availability
 
 	@echo
 
