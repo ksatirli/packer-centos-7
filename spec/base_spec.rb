@@ -84,6 +84,10 @@ describe 'YUM packages' do
     it { should be_installed }
   end
 
+  describe package('python2-pip') do
+    it { should be_installed }
+  end
+
   describe package('rsync') do
     it { should be_installed }
   end
@@ -105,6 +109,13 @@ describe 'YUM packages' do
   end
 
   describe package('wget') do
+    it { should be_installed }
+  end
+end
+
+# PIP package tests
+describe 'PIP packages' do
+  describe package('awscli') do
     it { should be_installed }
   end
 end

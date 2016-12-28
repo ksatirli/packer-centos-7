@@ -59,3 +59,8 @@
         -
           name: wget
           version: latest
+    pip:
+      base:
+        -
+          name: awscli
+          version: latest

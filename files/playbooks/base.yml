@@ -51,6 +51,23 @@
       tags:
         - yum_update_all
 
+    - name: install base `pip` Packages
+      pip:
+        name: "{{ item.name }}"
+        state: "{{ item.version | default('latest')}}"
+      with_items: "{{ packages.pip.base }}"
+      tags:
+        - pip
+        - pip_base
+
+    - name: upgrade `pip` to latest version
+      pip:
+        name: pip
+        state: latest
+      tags:
+        - pip
+        - pip_upgrade
+
   post_tasks:
     - name: clean YUM cache
       command: yum clean all
