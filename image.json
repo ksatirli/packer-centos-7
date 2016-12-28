@@ -6,7 +6,7 @@
       "encrypt_boot": "{{ user `encrypt_boot` }}",
       "instance_type": "{{ user `instance_type` }}",
       "region": "{{ user `region` }}",
-      "shutdown_behaviour": "{{ user `shutdown_behaviour` }}",
+      "shutdown_behavior": "{{ user `shutdown_behavior` }}",
       "source_ami_filter": {
         "filters": {
           "name": "{{ user `source_ami_name` }}*",
