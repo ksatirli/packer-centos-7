@@ -9,19 +9,53 @@
       dest: /home/centos/build-information.txt
 
   packages:
-    base:
-      - bind-utils
-      - curl
-      - git
-      - htop
-      - jq
-      - man
-      - mc
-      - mlocate
-      - nano
-      - rsync
-      - screen
-      - telnet
-      - tree
-      - vim-enhanced
-      - wget
+    yum:
+      base:
+        -
+          name: bind-utils
+          version: latest
+        -
+          name: curl
+          version: latest
+        -
+          name: git
+          version: latest
+        -
+          name: htop
+          version: latest
+        -
+          name: jq
+          version: latest
+        -
+          name: man
+          version: latest
+        -
+          name: mc
+          version: latest
+        -
+          name: mlocate
+          version: latest
+        -
+          name: nano
+          version: latest
+        -
+          name: python2-pip
+          version: latest
+        -
+          name: rsync
+          version: latest
+        -
+          name: screen
+          version: latest
+        -
+          name: telnet
+          version: latest
+        -
+          name: tree
+          version: latest
+        -
+          name: vim-enhanced
+          version: latest
+        -
+          name: wget
+          version: latest

@@ -37,9 +37,9 @@
 
     - name: install base YUM Packages
       yum:
-        name: "{{ item }}"
-        state: latest
-      with_items: "{{ packages.base }}"
+        name: "{{ item.name }}"
+        state: "{{ item.version | default('latest')}}"
+      with_items: "{{ packages.yum.base }}"
       tags:
         - yum
         - yum_base
