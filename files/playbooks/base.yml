@@ -35,7 +35,7 @@
         - yum
         - yum_epel
 
-    - name:
+    - name: install base YUM Packages
       yum:
         name: "{{ item }}"
         state: latest
@@ -44,7 +44,7 @@
         - yum
         - yum_base
 
-    - name: update all installed packages to latest version
+    - name: update all installed YUM packages to latest version
       yum:
         name: "*"
         state: latest
