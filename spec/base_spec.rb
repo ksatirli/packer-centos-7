@@ -116,6 +116,6 @@ end
 # PIP package tests
 describe 'PIP packages' do
   describe package('awscli') do
-    it { should be_installed }
+    it { should be_installed.by('pip') }
   end
 end
