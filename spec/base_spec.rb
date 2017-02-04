@@ -4,6 +4,24 @@ require 'spec_helper'
 $build_user = 'centos'
 $build_user_home = "/home/#{$build_user}"
 $build_information = "#{$build_user_home}/build-information.txt"
+
+$packages = [
+  'bind-utils',
+  'curl',
+  'git',
+  'htop',
+  'jq',
+  'mc',
+  'mlocate',
+  'nano',
+  'python2-pip',
+  'rsync',
+  'screen',
+  'telnet',
+  'tree',
+  'vim-enhanced',
+  'wget'
+]
 # END: config
 
 # build information tests
@@ -46,96 +64,19 @@ end
 
 
 # YUM package tests
-packages = ['bind-utils',
-            'curl',
-            'git',
-            'htop',
-            'jq',
-            'mc',
-            'mlocate',
-            'nano',
-            'python2-pip',
-            'rsync',
-            'screen',
-            'telnet',
-            'tree',
-            'vim-enhanced',
-            'wget']
-
 describe 'YUM packages' do
-  for pkg in packages
-    describe package('#{pkg}') do
+  for package in $packages
+    describe package("#{package}") do
       it { should be_installed }
+    end
   end
 end
 
-
-# describe 'YUM packages' do
-#   describe package('bind-utils') do
-#     it { should be_installed }
-#   end
-#
-#   describe package('curl') do
-#     it { should be_installed }
-#   end
-#
-#   describe package('git') do
-#     it { should be_installed }
-#   end
-#
-#   describe package('htop') do
-#     it { should be_installed }
-#   end
-#
-#   describe package('jq') do
-#     it { should be_installed }
-#   end
 
   # TODO: this currently fails even though `man` is installed
   # describe package('man') do
   #   it { should be_installed }
   # end
-
-#   describe package('mc') do
-#     it { should be_installed }
-#   end
-#
-#   describe package('mlocate') do
-#     it { should be_installed }
-#   end
-#
-#   describe package('nano') do
-#     it { should be_installed }
-#   end
-#
-#   describe package('python2-pip') do
-#     it { should be_installed }
-#   end
-#
-#   describe package('rsync') do
-#     it { should be_installed }
-#   end
-#
-#   describe package('screen') do
-#     it { should be_installed }
-#   end
-#
-#   describe package('telnet') do
-#     it { should be_installed }
-#   end
-#
-#   describe package('tree') do
-#     it { should be_installed }
-#   end
-#
-#   describe package('vim-enhanced') do
-#     it { should be_installed }
-#   end
-#
-#   describe package('wget') do
-#     it { should be_installed }
-#   end
-# end
 
 # PIP package tests
 describe 'PIP packages' do
