@@ -1,29 +1,5 @@
 require 'spec_helper'
 
-# BEGIN: config
-$build_user = 'centos'
-$build_user_home = "/home/#{$build_user}"
-$build_information = "#{$build_user_home}/build-information.txt"
-
-$packages = [
-  'bind-utils',
-  'curl',
-  'git',
-  'htop',
-  'jq',
-  'mc',
-  'mlocate',
-  'nano',
-  'python2-pip',
-  'rsync',
-  'screen',
-  'telnet',
-  'tree',
-  'vim-enhanced',
-  'wget'
-]
-# END: config
-
 # build information tests
 describe 'Build Information' do
   describe file("#{$build_information}") do
@@ -44,6 +20,7 @@ describe 'SELinux Policy' do
     it { should be_permissive }
   end
 end
+
 
 # user tests
 describe "User #{$build_user}" do
