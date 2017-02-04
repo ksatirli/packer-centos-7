@@ -71,6 +71,16 @@ AMI_NAME_SSM = cltvt-$(AMI_SLUG)-$(AMI_SLUG_SSM)
 PLAYBOOK_FILE_SSM = $(PLAYBOOKS_DIR)/$(AMI_SLUG_SSM).yml
 RSPEC_TARGET_SSM = $(AMI_SLUG_SSM)
 
+# check for availability of Golang
+ifeq ($(shell which go >/dev/null 2>&1; echo $$?), 1)
+	GO_AVAILABLE = false
+else
+	GO_AVAILABLE = true
+	GO_PATH = $(shell which go)
+	GO_VERSION = $(shell go version | grep -m 1 -o '[0-9]*\.[0-9]*\.[0-9]')
+endif
+# end: check for availability of Golang
+
 # check for availability of Packer
 ifeq ($(shell which packer >/dev/null 2>&1; echo $$?), 1)
 	PACKER_AVAILABLE = false
@@ -185,6 +195,20 @@ PACKER= \
 check:
 	@echo
 	@echo "Checking local dependencies..."
+
+# BEGIN: check for `golang` availability
+	@echo
+	@echo "Go"
+
+ifeq ($(GO_AVAILABLE), true)
+	@echo "$(SIGN_OK) found binary at \"$(GO_PATH)\""
+	@echo "$(SIGN_OK) found version \"$(GO_VERSION)\""
+else
+	@echo "$(SIGN_ERR) unable to find \"go\""
+	@EXIT_WITH_ERROR = true
+endif
+# END: check for `golang` availability
+
 
 # BEGIN: check for `packer` availability
 	@echo
