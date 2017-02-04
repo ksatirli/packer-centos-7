@@ -221,11 +221,12 @@ install-dependencies:
 	@echo && \
 	echo "Installing dependencies..." && \
 	echo && \
+	if [ ! -d "$(PACKER_PLUGIN_PATH)" ]; then mkdir -p "$(PACKER_PLUGIN_PATH)"; fi && \
 	export GOPATH="$(HOME)/.go" && \
 	go get "$(PACKER_PROVISIONER_1)" && \
 	cp "$$GOPATH/bin/$(shell basename $(PACKER_PROVISIONER_1))" "$(PACKER_PLUGIN_PATH)" && \
 	go get "$(PACKER_POSTPROCESSOR_1)" && \
-	cp "$$GOPATH/bin/$(shell basename $(PACKER_PROVISIONER_1))" "$(PACKER_PLUGIN_PATH)" && \
+	cp "$$GOPATH/bin/$(shell basename $(PACKER_POSTPROCESSOR_1))" "$(PACKER_PLUGIN_PATH)" && \
 	echo "$(SIGN_OK) installed Packer plugins in \`$(PACKER_PLUGIN_PATH)\`" && \
 	echo  && \
 	ansible-playbook \
