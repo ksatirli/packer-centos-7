@@ -204,7 +204,7 @@ ifeq ($(GOLANG_AVAILABLE), true)
 	@echo "$(SIGN_OK) found binary at \"$(GOLANG_PATH)\""
 	@echo "$(SIGN_OK) found version \"$(GOLANG_VERSION)\""
 else
-	@echo "$(SIGN_ERR) unable to find \"packer\""
+	@echo "$(SIGN_ERR) unable to find \"go\""
 	@EXIT_WITH_ERROR = true
 endif
 # END: check for `golang` availability
