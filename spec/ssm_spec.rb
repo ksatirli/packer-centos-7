@@ -1,11 +1,5 @@
 require 'spec_helper'
 
-# BEGIN: config
-$build_user = 'centos'
-$build_user_home = "/home/#{$build_user}"
-$build_information = "#{$build_user_home}/build-information.txt"
-# END: config
-
 # build information tests
 describe 'Build Information' do
   describe file("#{$build_information}") do

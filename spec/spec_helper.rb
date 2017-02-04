@@ -15,8 +15,25 @@ set :display_sudo, true
 set :request_pty,  true
 
 # BEGIN: config
-$app_binary = '/usr/bin/aws'
-$app_name = 'awscli'
-$app_version = '1.10.61'
-$dockerfile = './'
+$build_user = 'centos'
+$build_user_home = "/home/#{$build_user}"
+$build_information = "#{$build_user_home}/build-information.txt"
+
+$packages = [
+  'bind-utils',
+  'curl',
+  'git',
+  'htop',
+  'jq',
+  'mc',
+  'mlocate',
+  'nano',
+  'python2-pip',
+  'rsync',
+  'screen',
+  'telnet',
+  'tree',
+  'vim-enhanced',
+  'wget'
+]
 # END: config
