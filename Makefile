@@ -100,6 +100,7 @@ help:
 	@echo "$(STYLE_MUTE)  Packer Image for \`$(AMI_SLUG)\`$(STYLE_OFF)"
 	@echo
 	@echo	"$(STYLE_BRIGHT) OPTIONS:$(STYLE_OFF)"
+	@echo "     make install-dependencies $(STYLE_MUTE)...$(STYLE_OFF) installs required Packer plugins and Ansible roles from Galaxy"
 	@echo "     make check $(STYLE_MUTE)..................$(STYLE_OFF) checks if all local dependencies are available"
 	@echo
 	@echo "     make $(STYLE_UNDERLINE)$(AMI_SLUG_BASE)$(STYLE_OFF) $(STYLE_MUTE)...................$(STYLE_OFF) builds \`$(AMI_SLUG_BASE)\` image"
