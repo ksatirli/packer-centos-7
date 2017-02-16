@@ -11,6 +11,7 @@ This is a Packer machine image for AWS.
 ## Requirements
 
 An up-to-date installation of the following software:
+
 * [Golang](https://golang.org/doc/install)
 * [Packer](https://www.packer.io/downloads.html)
 * [AWS CLI](http://docs.aws.amazon.com/cli/latest/userguide/installing.html)
