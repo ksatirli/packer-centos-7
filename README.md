@@ -1,12 +1,14 @@
-![Packer](https://cultivatedops-static.s3.amazonaws.com/thirdparty/packer/logo.png)
-
-> Packer is a tool for creating machine and container images for multiple platforms from a single source configuration.
-
----
-
-# Packer machine image for CentOS 7 AMI using make and Ansible.
+# Packer Image for CentOS 7 AMI using make and Ansible.
 
 This is a Packer machine image for AWS.
+
+## This project is no longer maintained
+
+This repository is no longer actively maintained and is only made available here for reference.
+
+What follows is the original `README.md`:
+
+---
 
 ## Requirements
 
@@ -29,16 +31,14 @@ Run `make install-dependencies` to install missing dependencies.
 Edit the `Makefile` and change the following variables to fit your AWS configuration:
 
 ```
-AWS_PROFILE = cultivatedops
+AWS_PROFILE = your-profile
 AWS_REGION = eu-west-1
 ```
 
-### Maintainers
+## Author Information
 
-This image is currently maintained by the individuals listed below.
+This module was maintained by the contributors listed on [GitHub](https://github.com/operatehappy/terraform-aws-route53-github-verification/graphs/contributors)
 
-* [Kerim Satirli](mailto:kerim@cultivatedops.com)
-* [Thomas Krag](mailto:thomas@cultivatedops.com)
 
 
 ### License
